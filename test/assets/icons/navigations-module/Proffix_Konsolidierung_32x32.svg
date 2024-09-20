@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="e310dd85-363b-4cd3-b5f7-eefd34cbea0b" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #000;
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-2, .cls-3, .cls-4 {
+        stroke: #000;
+        stroke-linejoin: round;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke-linecap: square;
+      }
+
+      .cls-4 {
+        fill: #21b7b3;
+      }
+    </style>
+  </defs>
+  <line class="cls-3" x1="15.5" y1="5" x2="15.5" y2="22.6"/>
+  <polygon class="cls-1" points="10.7 8.9 11.5 9.7 15.5 5.4 19.5 9.7 20.3 8.9 15.5 3.7 10.7 8.9"/>
+  <rect class="cls-2" x="1.5" y="22.5" width="6" height="6"/>
+  <rect class="cls-2" x="12.5" y="22.5" width="6" height="6"/>
+  <rect class="cls-4" x="23.5" y="22.5" width="6" height="6"/>
+  <polyline class="cls-3" points="26.5 22.5 26.5 15.5 4.5 15.5 4.5 22.5"/>
+</svg>

@@ -1,0 +1,47 @@
+# Ignore Visual Studio files
+.vs/
+*.suo
+*.user
+*.userprefs
+*.sln.ide
+
+# Ignore build outputs
+bin/
+obj/
+out/
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+*.nuspec
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.log
+
+# Ignore configuration files
+appsettings*.json
+appsettings*.Development.json
+
+# Ignore user secrets
+secrets.json
+
+# Ignore publish files
+publish/
+
+# Ignore any IDE-specific files
+*.vscode/
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore Rider settings
+.idea/
+
+# Ignore local files for deployment
+*.publishsettings
+
+# Ignore backups and logs
+*.bak
+*.log
