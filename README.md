@@ -13,7 +13,7 @@ This application serves static files, such as an Angular application's build out
 
 The application can be configured using the `appsettings.json` file:
 
-- **StaticFileSettings:RootPath**: Specifies the path to the static files to be served. By default, it is set to `"wwwroot/dist/px-web-assetviewer"`.
+- **StaticFileSettings:RootPath**: Specifies the path to the static files to be served. By default, it is set to `"wwwroot/dist/"`.
 - **Serilog**: Configures the logging settings, including logging level and the location of the log files.
 
 ## How to Run
