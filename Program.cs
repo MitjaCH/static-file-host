@@ -1,41 +1,74 @@
-using System.Diagnostics;
-using Serilog;
+using Microsoft.Extensions.FileProviders;
+using StaticFileHost.Configuration;
+using System.Net;
+using System.IO;
+using Microsoft.Extensions.Hosting.WindowsServices;
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// Load configuration with default values
+var configuration = builder.Configuration;
+var runAsService = configuration.GetValue<bool>("RunAsService");
+var serverSettings = configuration.GetSection("ServerSettings").Get<ServerSettings>() ?? new ServerSettings();
+var staticFileSettings = configuration.GetSection("StaticFileSettings").Get<StaticFileSettings>() ?? new StaticFileSettings();
+var securitySettings = configuration.GetSection("SecuritySettings").Get<SecuritySettings>() ?? new SecuritySettings();
+
+// Check if running as a Windows Service based on configuration
+if (runAsService && WindowsServiceHelpers.IsWindowsService())
 {
-    public static void Main(string[] args)
+    builder.Host.UseWindowsService();
+}
+
+// Ensure wwwroot directory exist
+var baseDirectory = AppContext.BaseDirectory;
+var wwwrootPath = Path.Combine(baseDirectory, "wwwroot");
+
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    if (serverSettings.EnableHTTPS)
     {
-        var isService = !(Debugger.IsAttached || args.Contains("--console"));
-
-        if (isService)
+        options.Listen(IPAddress.Parse(serverSettings.IPAddress), serverSettings.Port, listenOptions =>
         {
-            var pathToExe = Process.GetCurrentProcess().MainModule?.FileName;
-            var pathToContentRoot = Path.GetDirectoryName(pathToExe);
+            listenOptions.UseHttps(serverSettings.SSLCertificatePath, serverSettings.SSLCertificatePassword);
+        });
+    }
+    else
+    {
+        options.Listen(IPAddress.Parse(serverSettings.IPAddress), serverSettings.Port);
+    }
+});
 
-            if (!string.IsNullOrEmpty(pathToContentRoot))
+var app = builder.Build();
+
+// IP Whitelisting Middleware
+app.Use(async (context, next) =>
+{
+    var remoteIp = context.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+    if (!staticFileSettings.AllowedIPs.Contains(remoteIp))
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsync("Access Denied");
+        return;
+    }
+    await next.Invoke();
+});
+
+// Static File Middleware with caching and directory browsing
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.GetFullPath(staticFileSettings.RootPath)),
+    EnableDirectoryBrowsing = staticFileSettings.EnableDirectoryBrowsing,
+    DefaultFilesOptions = { DefaultFileNames = staticFileSettings.DefaultFiles },
+    StaticFileOptions = {
+        OnPrepareResponse = ctx =>
+        {
+            if (staticFileSettings.CacheSettings.EnableCaching)
             {
-                Directory.SetCurrentDirectory(pathToContentRoot);
+                ctx.Context.Response.Headers["Cache-Control"] = $"public, max-age={staticFileSettings.CacheSettings.CacheDurationInSeconds}";
             }
         }
-
-        var hostBuilder = CreateHostBuilder(args.Where(arg => arg != "--console").ToArray());
-
-        if (isService)
-        {
-            hostBuilder.UseWindowsService().Build().Run();
-        }
-        else
-        {
-            var webHost = new WebHost(args);
-            webHost.Run();
-        }
     }
+});
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-            .UseSerilog();
-}
+app.Run();
