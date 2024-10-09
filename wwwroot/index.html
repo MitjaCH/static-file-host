@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Static File Host</title>
+    <title>Default Page - Static File Host</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            color: #333;
         }
         .container {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
             text-align: center;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #00796b;
+        }
+        p {
+            color: #004d40;
         }
         .footer {
-            margin-top: 10px;
-            font-size: 0.8em;
-            color: #777;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #004d40;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>It works! 🎉</h1>
-        <div class="footer">Made by Mitja Kurath</div>
+        <h1>Default Page</h1>
+        <p>This is the default page for the Static File Host project. Feel free to explore the files served by this application.</p>
     </div>
 </body>
 </html>

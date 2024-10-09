@@ -1,6 +1,6 @@
 # Variables
-$serviceName = "StaticFileHostService"
-$appPath = "C:\Path\To\YourApp\YourApp.exe"
+$serviceName = "Proffix.Assets"
+$appPath = "C:\DATA\bin\Release\net8.0\AngularHostApp.exe"
 
 # Check if the service already exists
 if (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) {
